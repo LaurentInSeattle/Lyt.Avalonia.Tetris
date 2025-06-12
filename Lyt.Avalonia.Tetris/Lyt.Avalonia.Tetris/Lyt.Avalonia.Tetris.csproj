@@ -7,7 +7,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
-		<RootNamespace>Lyt.Avalonia.AstroPic</RootNamespace>
+		<RootNamespace>Lyt.Avalonia.Tetris</RootNamespace>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	</PropertyGroup>
 
