@@ -1,0 +1,93 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36203.30
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Avalonia.Tetris.Desktop", "Lyt.Avalonia.Tetris.Desktop\Lyt.Avalonia.Tetris.Desktop.csproj", "{ADD67CAD-C164-4883-AB5D-6D011BFB5F01}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Avalonia", "Avalonia", "{DA5C3214-5362-D53D-7EE1-7B72DB27BE75}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{9A0CCAB9-4303-13B4-2371-F1B97FF5B728}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Avalonia.Mvvm", "..\..\Lyt.Avalonia\Lyt.Avalonia.Mvvm\Lyt.Avalonia.Mvvm.csproj", "{C74A9017-F284-572F-B570-BB1DCA74C606}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Avalonia.Interfaces", "..\..\Lyt.Avalonia\Lyt.Avalonia.Interfaces\Lyt.Avalonia.Interfaces.csproj", "{65C9DC80-8D03-5BF6-10C1-17AEA734F727}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Avalonia.Controls", "..\..\Lyt.Avalonia\Lyt.Avalonia.Controls\Lyt.Avalonia.Controls.csproj", "{32301CA2-4F0E-918F-6B00-EB1D72372DEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Framework.Interfaces", "..\..\Lyt.Framework\Lyt.Framework.Interfaces\Lyt.Framework.Interfaces.csproj", "{26E182A5-BF1B-91D4-51BD-1221C6ACB912}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Mvvm", "..\..\Lyt.Framework\Lyt.Mvvm\Lyt.Mvvm.csproj", "{960A29FA-DABB-77E4-B174-6A7CF73E95A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Utilities", "..\..\Lyt.Framework\Lyt.Utilities\Lyt.Utilities.csproj", "{C007E736-55C3-891A-C72D-584AD8184EE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Messenger", "..\..\Lyt.Framework\Lyt.Messenger\Lyt.Messenger.csproj", "{EF8EDF3D-26D5-09F5-70CA-BE91C893A5D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Avalonia.Tetris", "Lyt.Avalonia.Tetris\Lyt.Avalonia.Tetris.csproj", "{E66B1D83-34BF-4137-AADC-6E144BCDC421}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lyt.Model", "..\..\Lyt.Framework\Lyt.Model\Lyt.Model.csproj", "{9B136A50-C41C-55D5-D4B9-49541A912517}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ADD67CAD-C164-4883-AB5D-6D011BFB5F01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADD67CAD-C164-4883-AB5D-6D011BFB5F01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADD67CAD-C164-4883-AB5D-6D011BFB5F01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADD67CAD-C164-4883-AB5D-6D011BFB5F01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C74A9017-F284-572F-B570-BB1DCA74C606}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C74A9017-F284-572F-B570-BB1DCA74C606}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C74A9017-F284-572F-B570-BB1DCA74C606}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C74A9017-F284-572F-B570-BB1DCA74C606}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65C9DC80-8D03-5BF6-10C1-17AEA734F727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C9DC80-8D03-5BF6-10C1-17AEA734F727}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C9DC80-8D03-5BF6-10C1-17AEA734F727}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C9DC80-8D03-5BF6-10C1-17AEA734F727}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32301CA2-4F0E-918F-6B00-EB1D72372DEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32301CA2-4F0E-918F-6B00-EB1D72372DEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32301CA2-4F0E-918F-6B00-EB1D72372DEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32301CA2-4F0E-918F-6B00-EB1D72372DEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26E182A5-BF1B-91D4-51BD-1221C6ACB912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26E182A5-BF1B-91D4-51BD-1221C6ACB912}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26E182A5-BF1B-91D4-51BD-1221C6ACB912}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26E182A5-BF1B-91D4-51BD-1221C6ACB912}.Release|Any CPU.Build.0 = Release|Any CPU
+		{960A29FA-DABB-77E4-B174-6A7CF73E95A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{960A29FA-DABB-77E4-B174-6A7CF73E95A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{960A29FA-DABB-77E4-B174-6A7CF73E95A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{960A29FA-DABB-77E4-B174-6A7CF73E95A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C007E736-55C3-891A-C72D-584AD8184EE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C007E736-55C3-891A-C72D-584AD8184EE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C007E736-55C3-891A-C72D-584AD8184EE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C007E736-55C3-891A-C72D-584AD8184EE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF8EDF3D-26D5-09F5-70CA-BE91C893A5D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF8EDF3D-26D5-09F5-70CA-BE91C893A5D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF8EDF3D-26D5-09F5-70CA-BE91C893A5D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF8EDF3D-26D5-09F5-70CA-BE91C893A5D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E66B1D83-34BF-4137-AADC-6E144BCDC421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E66B1D83-34BF-4137-AADC-6E144BCDC421}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E66B1D83-34BF-4137-AADC-6E144BCDC421}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E66B1D83-34BF-4137-AADC-6E144BCDC421}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B136A50-C41C-55D5-D4B9-49541A912517}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B136A50-C41C-55D5-D4B9-49541A912517}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B136A50-C41C-55D5-D4B9-49541A912517}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B136A50-C41C-55D5-D4B9-49541A912517}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C74A9017-F284-572F-B570-BB1DCA74C606} = {DA5C3214-5362-D53D-7EE1-7B72DB27BE75}
+		{65C9DC80-8D03-5BF6-10C1-17AEA734F727} = {DA5C3214-5362-D53D-7EE1-7B72DB27BE75}
+		{32301CA2-4F0E-918F-6B00-EB1D72372DEF} = {DA5C3214-5362-D53D-7EE1-7B72DB27BE75}
+		{26E182A5-BF1B-91D4-51BD-1221C6ACB912} = {9A0CCAB9-4303-13B4-2371-F1B97FF5B728}
+		{960A29FA-DABB-77E4-B174-6A7CF73E95A0} = {9A0CCAB9-4303-13B4-2371-F1B97FF5B728}
+		{C007E736-55C3-891A-C72D-584AD8184EE3} = {9A0CCAB9-4303-13B4-2371-F1B97FF5B728}
+		{EF8EDF3D-26D5-09F5-70CA-BE91C893A5D2} = {9A0CCAB9-4303-13B4-2371-F1B97FF5B728}
+		{9B136A50-C41C-55D5-D4B9-49541A912517} = {9A0CCAB9-4303-13B4-2371-F1B97FF5B728}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FB0E428D-060B-45F1-8957-F6486F0E4936}
+	EndGlobalSection
+EndGlobal
