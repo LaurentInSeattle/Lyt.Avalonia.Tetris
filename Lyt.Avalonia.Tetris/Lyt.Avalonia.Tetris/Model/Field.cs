@@ -1,5 +1,7 @@
 ﻿namespace Lyt.Avalonia.Tetris.Model;
 
+using static Tetromino; 
+
 public sealed class Field
 {
     public int Rows = 24;
@@ -8,13 +10,17 @@ public sealed class Field
     public double CellWidth = 32;
     public double CellHeight = 32;
 
-    public Brush[,] Matrix { get; private set; }
+    public ShapeKind [,] Matrix { get; private set; }
 
     public double Width => this.CellWidth * this.Columns;
 
     public double Height => this.CellHeight * this.Rows;
 
-    public Field() => this.Matrix = new Brush[this.Rows, this.Columns];
+    public Field()
+    {
+        this.Matrix = new ShapeKind[this.Rows, this.Columns];
+        this.Clear();
+    } 
 
     public void Clear()
     {
@@ -47,7 +53,7 @@ public sealed class Field
         int columns = this.Matrix.GetLength(1);
         for (int columnIndex = 0; columnIndex < columns; columnIndex++)
         {
-            if (this.Matrix[rowIndex, columnIndex] == null)
+            if (this.Matrix[rowIndex, columnIndex] == ShapeKind.Empty)
             {
                 return false;
             }
@@ -61,7 +67,7 @@ public sealed class Field
         int columns = this.Matrix.GetLength(1);
         for (int columnIndex = 0; columnIndex < columns; columnIndex++)
         {
-            this.Matrix[rowIndex, columnIndex] = null;
+            this.Matrix[rowIndex, columnIndex] = ShapeKind.Empty;
         }
     }
 
@@ -72,10 +78,10 @@ public sealed class Field
         {
             for (int columnIndex = 0; columnIndex < columns; columnIndex++)
             {
-                if (this.Matrix[rowIndex, columnIndex] != null)
+                if (this.Matrix[rowIndex, columnIndex] != ShapeKind.Empty)
                 {
                     var color = this.Matrix[rowIndex, columnIndex];
-                    this.Matrix[rowIndex, columnIndex] = null;
+                    this.Matrix[rowIndex, columnIndex] = ShapeKind.Empty;
                     this.Matrix[rowIndex + rowIndexOffset, columnIndex] = color;
                 }
             }

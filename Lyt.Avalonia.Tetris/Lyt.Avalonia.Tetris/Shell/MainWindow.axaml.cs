@@ -18,7 +18,7 @@ public partial class MainWindow : Window
     {
         var vm = App.GetRequiredService<GameViewModel>();
         vm.CreateViewAndBind();
-        this.innerGrid.Children.Add(vm.View);
+        this.viewbox.Child = vm.View;
     }
 
     private void OnMainWindowClosing(object? sender, CancelEventArgs e)

@@ -2,35 +2,35 @@
 
 public sealed partial class Tetromino
 {
-    public void Move(Brush[,] fieldMatrix, MoveContext context)
+    public void Move(ShapeKind[,] fieldMatrix, MoveContext context)
     {
         this.RemoveTetrominoFromFieldMatrix(fieldMatrix);
         this.Move(context);
         this.UpdateField(fieldMatrix);
     }
 
-    public void Rotate(Brush[,] fieldMatrix, MoveContext context)
+    public void Rotate(ShapeKind[,] fieldMatrix, MoveContext context)
     {
         this.RemoveTetrominoFromFieldMatrix(fieldMatrix);
         this.Rotate(context);
         this.UpdateField(fieldMatrix);
     }
 
-    private void RemoveTetrominoFromFieldMatrix(Brush[,] matrix)
+    private void RemoveTetrominoFromFieldMatrix(ShapeKind[,] matrix)
     {
         for (int i = 0; i < this.BodyPositions.Count; i++)
         {
             var position = this.BodyPositions[i];
-            matrix[position.Y, position.X] = null;
+            matrix[position.Y, position.X] = ShapeKind.Empty;
         }
     }
 
-    public void UpdateField(Brush[,] fieldMatrix)
+    public void UpdateField(ShapeKind[,] fieldMatrix)
     {
         for (int i = 0; i < this.BodyPositions.Count; i++)
         {
             var position = this.BodyPositions[i];
-            fieldMatrix[position.Y, position.X] = this.Brush;
+            fieldMatrix[position.Y, position.X] = this.Shape;
         }
     }
 

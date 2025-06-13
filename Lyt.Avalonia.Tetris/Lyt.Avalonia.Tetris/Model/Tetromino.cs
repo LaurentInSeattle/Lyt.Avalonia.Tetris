@@ -29,14 +29,17 @@ public sealed partial class Tetromino
     private static readonly Dictionary<ShapeKind, SolidColorBrush> shapeTypeToBrushDict =
         new()
         {
-            //[ShapeKind.J] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D23734")),
-            //[ShapeKind.L] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1A73B4")),
-            //[ShapeKind.S] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#92832C")),
-            //[ShapeKind.Z] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1D9079")),
-            //[ShapeKind.T] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#446524")),
-            //[ShapeKind.O] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#76B03E")),
-            //[ShapeKind.I] = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#5A68A1")),
+            [ShapeKind.J] = new SolidColorBrush(Color.Parse("#D23734")),
+            [ShapeKind.L] = new SolidColorBrush(Color.Parse("#1A73B4")),
+            [ShapeKind.S] = new SolidColorBrush(Color.Parse("#92832C")),
+            [ShapeKind.Z] = new SolidColorBrush(Color.Parse("#1D9079")),
+            [ShapeKind.T] = new SolidColorBrush(Color.Parse("#446524")),
+            [ShapeKind.O] = new SolidColorBrush(Color.Parse("#76B03E")),
+            [ShapeKind.I] = new SolidColorBrush(Color.Parse("#5A68A1")),
         };
+
+    public static SolidColorBrush ShapeToBrush (ShapeKind shapeKind)
+        => shapeTypeToBrushDict[shapeKind];
 
     private static readonly Dictionary<ShapeKind, bool[,]> shapeTypeToMatrixDict =
         new()
@@ -152,11 +155,11 @@ public sealed partial class Tetromino
         return new Position(actualX, actualY);
     }
 
-    public bool CollisionDetected(Brush[,] fieldMatrix, List<Position> updatedTetrominoPositions)
+    public bool CollisionDetected(ShapeKind[,] fieldMatrix, List<Position> updatedTetrominoPositions)
     {
         int rows = fieldMatrix.GetLength(0);
         int cols = fieldMatrix.GetLength(1);
-        var modifiedFieldMatrix = new Brush[rows, cols];
+        var modifiedFieldMatrix = new ShapeKind[rows, cols];
         for (int r = 0; r < rows; r++)
         {
             for (int c = 0; c < cols; c++)
@@ -167,7 +170,7 @@ public sealed partial class Tetromino
 
         foreach (var position in this.BodyPositions)
         {
-            modifiedFieldMatrix[position.Y, position.X] = null;
+            modifiedFieldMatrix[position.Y, position.X] = ShapeKind.Empty;
         }
 
         foreach (var position in updatedTetrominoPositions)
@@ -175,7 +178,7 @@ public sealed partial class Tetromino
             int x = position.X;
             int y = position.Y;
             bool isOutsideMatrix = x < 0 || x >= cols || y < 0 || y >= rows;
-            if (isOutsideMatrix || modifiedFieldMatrix[y, x] != null)
+            if (isOutsideMatrix || modifiedFieldMatrix[y, x] != ShapeKind.Empty)
             {
                 return true;
             }

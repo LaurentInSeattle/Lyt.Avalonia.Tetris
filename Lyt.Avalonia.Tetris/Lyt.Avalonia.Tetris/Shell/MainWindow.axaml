@@ -1,22 +1,29 @@
 <Window 
-	x:Class="Lyt.Avalonia.Tetris.Shell.MainWindow"
-	xmlns="https://github.com/avaloniaui"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="Lyt.Avalonia.Tetris.Shell.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
-	Title="Avalonia Tetris"
+    Title="Avalonia Tetris"
     Background="Black"
-	>
-	<Viewbox
-        x:Name="viewbox"
-        VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-        >
-		<Grid
-			x:Name="innerGrid"
-	        VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-			/>
-	</Viewbox>
+    >
+    <Grid>
+        <Image
+            Stretch="UniformToFill"
+            Source="\Assets\Images\dark.jpg"
+            Grid.ColumnSpan="999" Grid.RowSpan="999"
+            />
+        <Rectangle
+            Fill="#20000020"
+            Grid.ColumnSpan="999" Grid.RowSpan="999"
+            />
+        <Viewbox
+            x:Name="viewbox"
+            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+            >
+        </Viewbox>
+    </Grid>
 </Window>

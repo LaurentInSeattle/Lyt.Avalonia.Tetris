@@ -1,5 +1,7 @@
 ﻿namespace Lyt.Avalonia.Tetris.Shell;
 
+using static Tetromino;
+
 public sealed partial class GameViewModel : ViewModel<GameView>
 {
     public enum State
@@ -20,9 +22,10 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     private Grid? gameGrid;
     private Grid? nextShapeGrid;
-    private Brush? endGameBlocksBrush;
     private Tetromino? fallingTetromino;
     private Tetromino? nextTetromino;
+
+    // private Brush? endGameBlocksBrush;
     // private BackgroundWorker endGameAnimationWorker;
 
     [ObservableProperty]
@@ -45,17 +48,6 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     [ObservableProperty]
     private bool firstStartVisibility;
-
-    #region To please the XAML viewer 
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-    // Should never be executed 
-    public GameViewModel()
-    {
-    }
-#pragma warning restore CS8618 
-
-    #endregion To please the XAML viewer 
 
     public GameViewModel(TetrisModel tetrisModel)
     {
@@ -108,18 +100,23 @@ public sealed partial class GameViewModel : ViewModel<GameView>
     [RelayCommand]
     public void OnExit()
     {
-        Debug.WriteLine("OnExit");
-        //var application = App.GetRequiredService<IApplicationBase>();
-        //await application.Shutdown();
+        // Debug.WriteLine("OnExit");
+
+        // Fire and forget shutdown 
+        var application = App.GetRequiredService<IApplicationBase>();
+        _ = application.Shutdown();
     }
+
+#pragma warning restore CA1822
+#pragma warning restore IDE0079
 
     [RelayCommand]
     public void OnStartGame()
     {
-        Debug.WriteLine("OnStartGame");
+        // Debug.WriteLine("OnStartGame");
         if (this.IsGameRunning)
         {
-            return; 
+            return;
         }
 
         this.IsEndGameInfoVisible = false;
@@ -129,14 +126,14 @@ public sealed partial class GameViewModel : ViewModel<GameView>
     [RelayCommand]
     public void OnEndGame()
     {
-        Debug.WriteLine("OnEndGame");
+        // Debug.WriteLine("OnEndGame");
         if (!this.IsGameRunning)
         {
             return;
         }
 
         this.EndGame();
-    } 
+    }
 
     private void OnGameEnded() { } //  => CommandManager.InvalidateRequerySuggested();
 
@@ -161,12 +158,12 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         }
 
         this.ResumeGame();
-    } 
+    }
 
     [RelayCommand]
     public void OnMove(Direction direction)
     {
-        Debug.WriteLine("OnMove: " + direction.ToString());
+        // Debug.WriteLine("OnMove: " + direction.ToString());
         if (!this.IsGameRunning)
         {
             return;
@@ -182,8 +179,7 @@ public sealed partial class GameViewModel : ViewModel<GameView>
     [RelayCommand]
     public void OnRotate(bool isCounterClockwise)
     {
-        Debug.WriteLine("OnRotate: CCW: " + isCounterClockwise.ToString());
-
+        // Debug.WriteLine("OnRotate: CCW: " + isCounterClockwise.ToString());
         if (!this.IsGameRunning)
         {
             return;
@@ -194,9 +190,6 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     [RelayCommand]
     public void OnHideEndGameInfo() => this.IsEndGameInfoVisible = false;
-
-#pragma warning restore CA1822
-#pragma warning restore IDE0079
 
     private void StartNewGame()
     {
@@ -210,10 +203,10 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         this.Score = 0;
         this.Lines = 0;
         this.field.Clear();
-        this.DropNewTetromino();
         this.gameState = State.Running;
         this.frameRenderTimer.Interval = TimeSpan.FromMilliseconds(frameRenderingInterval);
         this.frameRenderTimer.Start();
+        this.DropNewTetromino();
     }
 
     private void PauseGame() => this.gameState = State.Paused;
@@ -222,8 +215,8 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     private void EndGame()
     {
-        if ((this.gameState == State.Running || this.gameState == State.Paused) && 
-            true ) // !this.endGameAnimationWorker.IsBusy)
+        if ((this.gameState == State.Running || this.gameState == State.Paused) &&
+            true) // !this.endGameAnimationWorker.IsBusy)
         {
             this.frameRenderTimer.Stop();
             Model.Score.SaveHighscore(this.Highscore);
@@ -235,7 +228,13 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     private void OnFrameRenderTimerTick(object? _, EventArgs e)
     {
-        if (this.frameRenderTimer.IsEnabled && this.fallingTetromino != null)
+        if ((this.gameState != State.Running) ||
+            (this.fallingTetromino is null))
+        {
+            return;
+        }
+
+        if (this.frameRenderTimer.IsEnabled)
         {
             this.MoveTetromino(Direction.Down);
         }
@@ -243,11 +242,29 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     private void DropNewTetromino()
     {
+        if (this.gameState != State.Running)
+        {
+            return;
+        }
+
         if (this.TryDropNewTetromino())
         {
+            if (this.nextTetromino is null)
+            {
+                Debug.WriteLine("nextTetromino should not be null");
+                return;
+            }
+
+            if (this.fallingTetromino is null)
+            {
+                Debug.WriteLine("fallingTetromino should not be null");
+                return;
+            }
+
             this.fallingTetromino.UpdateField(this.field.Matrix);
             this.RenderField();
-            this.RenderNextShape(Tetromino.GetMatrix(this.nextTetromino.Shape), this.nextTetromino.Brush);
+            ShapeKind shapeKind = this.nextTetromino.Shape;
+            this.RenderNextShape(Tetromino.GetMatrix(shapeKind), shapeKind);
         }
         else
         {
@@ -271,47 +288,50 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     private void MoveTetromino(Direction direction)
     {
-        if (this.fallingTetromino != null && this.gameState == State.Running)
+        if ((this.gameState != State.Running) ||
+            (this.fallingTetromino is null))
         {
-            var movingContext = this.fallingTetromino.GetMoveContext(direction, movementSpeed);
-            if (!this.fallingTetromino.CollisionDetected(this.field.Matrix, movingContext.Positions))
+            return;
+        }
+
+        var movingContext = this.fallingTetromino.GetMoveContext(direction, movementSpeed);
+        if (!this.fallingTetromino.CollisionDetected(this.field.Matrix, movingContext.Positions))
+        {
+            this.fallingTetromino.Move(this.field.Matrix, movingContext);
+            this.RenderField();
+        }
+        else
+        {
+            if (direction == Direction.Down)
             {
-                this.fallingTetromino.Move(this.field.Matrix, movingContext);
-                this.RenderField();
-            }
-            else
-            {
-                if (direction == Direction.Down)
+                int clearedRowsCount = this.field.ClearFullRows();
+
+                this.Lines += clearedRowsCount;
+                if (this.Lines >= ((this.Level * 10) + 10))
                 {
-                    int clearedRowsCount = this.field.ClearFullRows();
+                    this.Level++;
 
-                    this.Lines += clearedRowsCount;
-                    if (this.Lines >= ((this.Level * 10) + 10))
+                    int currentTimerInterval = this.frameRenderTimer.Interval.Milliseconds;
+                    int delta = 45 - (3 * this.Level);
+                    if (delta < 2)
                     {
-                        this.Level++;
-
-                        int currentTimerInterval = this.frameRenderTimer.Interval.Milliseconds;
-                        int delta = 45 - (3 * this.Level);
-                        if (delta < 2)
-                        {
-                            delta = 2;
-                        }
-
-                        int newInterval = currentTimerInterval - delta;
-                        if (newInterval < 50)
-                        {
-                            newInterval = 50;
-                        }
-
-                        Debug.WriteLine("Current: " + currentTimerInterval + "   New: " + newInterval);
-                        this.frameRenderTimer.Interval = TimeSpan.FromMilliseconds(newInterval);
+                        delta = 2;
                     }
 
+                    int newInterval = currentTimerInterval - delta;
+                    if (newInterval < 50)
+                    {
+                        newInterval = 50;
+                    }
 
-                    this.AddToScore(Model.Score.GetLineScore(this.Level, clearedRowsCount));
-                    this.RenderField();
-                    this.DropNewTetromino();
+                    Debug.WriteLine("Current: " + currentTimerInterval + "   New: " + newInterval);
+                    this.frameRenderTimer.Interval = TimeSpan.FromMilliseconds(newInterval);
                 }
+
+
+                this.AddToScore(Model.Score.GetLineScore(this.Level, clearedRowsCount));
+                this.RenderField();
+                this.DropNewTetromino();
             }
         }
     }
@@ -327,14 +347,23 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     private void RotateTetromino(bool isCounterClockwise = false)
     {
-        if (this.fallingTetromino.Shape != Tetromino.ShapeKind.O && this.gameState == State.Running)
+        if ((this.gameState != State.Running) ||
+            (this.fallingTetromino is null))
         {
-            var rotationContext = this.fallingTetromino.GetRotationContext(isCounterClockwise);
-            if (!this.fallingTetromino.CollisionDetected(this.field.Matrix, rotationContext.Positions))
-            {
-                this.fallingTetromino.Rotate(this.field.Matrix, rotationContext);
-                this.RenderField();
-            }
+            return;
+        }
+
+        if (this.fallingTetromino.Shape == Tetromino.ShapeKind.O)
+        {
+            // The O shape is invariant for rotation: do nothing 
+            return;
+        }
+
+        var rotationContext = this.fallingTetromino.GetRotationContext(isCounterClockwise);
+        if (!this.fallingTetromino.CollisionDetected(this.field.Matrix, rotationContext.Positions))
+        {
+            this.fallingTetromino.Rotate(this.field.Matrix, rotationContext);
+            this.RenderField();
         }
     }
 
@@ -388,118 +417,4 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         //Schedule.OnUiThread(200, this.OnEndGameAnimationCompleted);
     }
 
-    private void RenderField()
-    {
-        this.gameGrid.Children.Clear();
-        this.RenderGridLines();
-        this.RenderShapes();
-    }
-
-    private void RenderShapes()
-    {
-        int rows = this.field.Matrix.GetLength(0);
-        int columns = this.field.Matrix.GetLength(1);
-        for (int rowIndex = 0; rowIndex < rows; ++rowIndex)
-        {
-            for (int columnIndex = 0; columnIndex < columns; ++columnIndex)
-            {
-                var color = this.field.Matrix[rowIndex, columnIndex];
-                if (color != null)
-                {
-                    this.RenderBlock(columnIndex, rowIndex, color);
-                }
-            }
-        }
-    }
-
-    private void RenderBlock(int columnIndex, int rowIndex, Brush brush)
-        => this.gameGrid.Children.Add(CreateBlockVisual(columnIndex, rowIndex, brush));
-
-    private void RenderGridLines()
-    {
-        double cellWidth = this.field.CellWidth;
-        double cellHeight = this.field.CellHeight;
-        var gridLinesPanel = new Canvas();
-        var brush = Brushes.BlanchedAlmond;
-        for (double linePosition = cellWidth; linePosition <= this.field.Width - cellWidth; linePosition += cellWidth)
-        {
-            var verticalLine = new Line
-            {
-                //X1 = linePosition,
-                //X2 = linePosition,
-                //Y1 = 0,
-                //Y2 = this.field.Height,
-                Stroke = brush,
-                StrokeThickness = 1,
-                Opacity = 0.1,
-            };
-            gridLinesPanel.Children.Add(verticalLine);
-        }
-
-        for (double linePosition = cellHeight; linePosition <= this.field.Height - cellHeight; linePosition += cellHeight)
-        {
-            var horizontalLine = new Line
-            {
-                //StartPoint = new Avalonia.Point(0,this.field.Width),
-                //EndPoint = new Avalonia.Point(linePosition,linePosition),
-                Stroke = brush,
-                StrokeThickness = 1,
-                Opacity = 0.1,
-            };
-            gridLinesPanel.Children.Add(horizontalLine);
-        }
-
-        this.gameGrid.Children.Insert(0, gridLinesPanel);
-    }
-
-    private void RenderNextShape(bool[,] shapeBodyMatrix, Brush brush)
-    {
-        this.nextShapeGrid.Children.Clear();
-        int rows = shapeBodyMatrix.GetLength(0);
-        int columns = shapeBodyMatrix.GetLength(1);
-        double width = this.field.CellWidth * columns;
-        double height = this.field.CellHeight * rows;
-        GameViewModel.SetupGameSurfaceVisual(
-            this.nextShapeGrid, rows, columns, width, height, this.field.CellWidth, this.field.CellHeight);
-        for (int row = 0; row < rows; ++row)
-        {
-            for (int col = 0; col < columns; ++col)
-            {
-                if (shapeBodyMatrix[row, col])
-                {
-                    this.nextShapeGrid.Children.Add(CreateBlockVisual(col, row, brush));
-                }
-            }
-        }
-    }
-
-    private static Control CreateBlockVisual(int x, int y, Brush brush)
-    {
-        var border = new Border
-        {
-            Background = brush,
-            BorderThickness = new Thickness(0),
-        };
-        Grid.SetColumn(border, x);
-        Grid.SetRow(border, y);
-        return border;
-    }
-
-    private static void SetupGameSurfaceVisual(
-        Grid grid, int rows, int columns, double totalWidth, double totalHeight, double cellWidth, double cellHeight)
-    {
-        grid.Width = totalWidth;
-        grid.Height = totalHeight;
-        for (int row = 0; row < rows; row++)
-        {
-            var rowDefinition = new RowDefinition { Height = new GridLength(cellHeight) };
-            grid.RowDefinitions.Add(rowDefinition);
-        }
-
-        for (int column = 0; column < columns; column++)
-        {
-            var columnDefinition = new ColumnDefinition { Width = new GridLength(cellWidth) };
-            grid.ColumnDefinitions.Add(columnDefinition);
-        }
-    }
 }
