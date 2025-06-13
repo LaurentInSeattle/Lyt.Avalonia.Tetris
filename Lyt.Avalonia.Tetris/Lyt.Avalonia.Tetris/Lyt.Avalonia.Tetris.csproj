@@ -35,4 +35,10 @@
 		<ProjectReference Include="..\..\..\Lyt.Framework\Lyt.Mvvm\Lyt.Mvvm.csproj" />
 		<ProjectReference Include="..\..\..\Lyt.Framework\Lyt.Utilities\Lyt.Utilities.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Shell\GamelView.axaml.cs">
+	    <DependentUpon>GamelView.axaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
 </Project>

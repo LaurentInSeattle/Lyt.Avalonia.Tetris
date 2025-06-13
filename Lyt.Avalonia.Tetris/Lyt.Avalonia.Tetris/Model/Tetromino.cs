@@ -11,7 +11,12 @@ public sealed partial class Tetromino
 {
     public enum ShapeKind
     {
-        O, L, J, I, S, Z, T 
+        // Real shapes 
+        O, L, J, I, S, Z, T,
+
+        // Placeholder to denote an empty slot on the the field matrix 
+        // => MUST be last one !!!
+        Empty 
     }
 
     #region Statics 
@@ -81,21 +86,13 @@ public sealed partial class Tetromino
             },
         };
 
-    static Tetromino()
-    {
-        foreach (var item in shapeTypeToBrushDict)
-        {
-            // item.Value.Freeze();
-        }
-    }
-
     public static bool[,] GetMatrix(ShapeKind shape) => shapeTypeToMatrixDict[shape];
 
     #endregion Statics 
 
     public Tetromino(Position initialPosition)
     {
-        var shapeType = shapeTypes[randomNumberGenerator.Next(0, shapeTypes.Length)];
+        var shapeType = shapeTypes[randomNumberGenerator.Next(0, shapeTypes.Length-1)];
         this.TopLeft = initialPosition;
         this.Shape = shapeType;
         this.Brush = shapeTypeToBrushDict[shapeType];

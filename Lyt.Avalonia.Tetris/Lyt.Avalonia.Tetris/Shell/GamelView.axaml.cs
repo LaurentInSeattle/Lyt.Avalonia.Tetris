@@ -1,8 +1,8 @@
 ﻿namespace Lyt.Avalonia.Tetris.Shell;
 
-public partial class ShellView : UserControl, IView
+public partial class GameView : UserControl, IView
 {
-    public ShellView()
+    public GameView()
     {
         this.InitializeComponent();
         this.Loaded += (s, e) =>

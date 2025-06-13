@@ -1,0 +1,215 @@
+<UserControl 
+    x:Class="Lyt.Avalonia.Tetris.Shell.GameView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:Lyt.Avalonia.Tetris.Shell"
+    xmlns:glyphs="clr-namespace:Lyt.Tetris.Controls.Glyphs;assembly=Lyt.Avalonia.Controls"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:local="clr-namespace:Lyt.Avalonia.Tetris.Shell"
+    xmlns:tetro="clr-namespace:Lyt.Avalonia.Tetris.Model"
+
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:DataType="vm:GameViewModel" 
+    Background="Transparent"
+    Focusable="True"
+    >
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:GameViewModel />
+    </Design.DataContext>
+
+    <!-- User Control must have Focusable="True" or else key bindings wont work -->
+    <UserControl.KeyBindings>
+        <KeyBinding Command="{Binding OnStartGame}" Gesture="Enter" />
+        <KeyBinding Command="{Binding OnStartGame}" Gesture="Space" />
+        <KeyBinding Command="{Binding OnExit}" Gesture="Escape" />
+        <KeyBinding Command="{Binding OnMove}" CommandParameter="{x:Static tetro:Direction.Down}" Gesture="Down" />
+        <KeyBinding Command="{Binding OnMove}" CommandParameter="{x:Static tetro:Direction.Left}" Gesture="Left" />
+        <KeyBinding Command="{Binding OnMove}" CommandParameter="{x:Static tetro:Direction.Right}" Gesture="Right" />
+        <KeyBinding Command="{Binding OnRotate}" Gesture="Z">
+            <KeyBinding.CommandParameter>
+                <sys:Boolean>True</sys:Boolean>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Command="{Binding OnRotate}" Gesture="X">
+            <KeyBinding.CommandParameter>
+                <sys:Boolean>False</sys:Boolean>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+    </UserControl.KeyBindings>
+    <Grid
+        x:Name="rootPanel"
+        >
+        <Image
+            Stretch="UniformToFill"
+            Source="\Assets\Images\dark.jpg"
+            Grid.ColumnSpan="999" Grid.RowSpan="999"
+            />
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="342"/>
+            </Grid.ColumnDefinitions>
+            <Border
+                BorderThickness="1" BorderBrush="#20FFEBCD"
+                >
+                <Grid
+                    x:Name="renderSurface"
+                    />
+            </Border>
+            <StackPanel Grid.Column="1" Margin="10 0 0 0">
+                <Border BorderBrush="Black" BorderThickness="0" Margin="0 0 0 10" Padding="5">
+                    <Grid
+                        Margin="12 0 0 0"
+                        >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="80" />
+                            <RowDefinition Height="80" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Text="Level: "
+                            Foreground="BlanchedAlmond"
+                            FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                            />
+                        <TextBlock
+                            Grid.Column="1"
+                            Foreground="BlanchedAlmond"
+                            Text="{Binding Level}" HorizontalAlignment="Right"
+                            FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                            />
+                        <TextBlock
+                            Grid.Row="1"
+                            Text="Score: "
+                            Foreground="BlanchedAlmond"
+                            FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                            />
+                        <TextBlock
+                            Grid.Row="1" Grid.Column="1"
+                            x:Name="scoreTb"
+                            Text="{Binding Score}"
+                            HorizontalAlignment="Right"
+                            Foreground="BlanchedAlmond"
+                            FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                            />
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Text="Lines: "
+                            Foreground="BlanchedAlmond"
+                            FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                            />
+                        <TextBlock
+                            Grid.Row="2" Grid.Column="1"
+                            Text="{Binding Lines}"
+                            HorizontalAlignment="Right"
+                            Foreground="BlanchedAlmond"
+                            FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                            />
+
+                        <StackPanel Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Top">
+                            <TextBlock
+                                Text="High Score: "
+                                Foreground="BlanchedAlmond"
+                                FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                                />
+                        </StackPanel>
+                        <TextBlock
+                            Grid.Row="3" Grid.Column="1"
+                            Text="{Binding Highscore}"
+                            HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Foreground="BlanchedAlmond"
+                            FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                            />
+                    </Grid>
+                </Border>
+                <Border MinWidth="80" HorizontalAlignment="Left"
+                        BorderBrush="Black" BorderThickness="0">
+                    <StackPanel Margin="16 4  4 4" MinHeight="100" MinWidth="100">
+                        <TextBlock
+                            Text="Next:"
+                            Foreground="BlanchedAlmond"
+                            FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                            />
+                        <Grid
+                            x:Name="nextShapeRenderSurface"
+                            Margin="40 20 0 0"
+                            />
+                    </StackPanel>
+                </Border>
+                <Border
+                    HorizontalAlignment="Left" Margin="0 10 0 0"
+                    IsVisible="True"
+                    >
+                    <StackPanel>
+                        <Button
+                            Content="Start" Command="{Binding OnStartGame}"  Focusable="False"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Padding="10 5 10 5"
+                            Margin="0 4 0 0"
+                            Width="100"
+                            />
+                        <Button
+                            Content="End" Command="{Binding OnEndGame}" Focusable="False"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Padding="5" Margin="0 4 0 0"
+                            Width="100"
+                            />
+                        <Button
+                            Content="Pause" Command="{Binding OnPause}" Focusable="False"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Padding="10 5 10 5" Margin="0 4 0 0"
+                            Width="100"
+                            />
+                        <Button
+                            Content="Resume" Command="{Binding OnResume}" Focusable="False"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Padding="10 5 10 5" Margin="0 4 0 0"
+                            Width="100"
+                            />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            <TextBlock
+                IsVisible="{Binding EndGameInfoVisibility}"
+                Grid.Column="0" Grid.ColumnSpan="2"
+                Foreground="DarkOrange"
+                Text="Game Over"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Margin="0 260 0 0"
+                FontSize="120" FontStyle="Normal" FontWeight="Thin"
+                />
+            <TextBlock
+                IsVisible="{Binding FirstStartVisibility}"
+                Grid.Column="0" Grid.ColumnSpan="2"
+                Foreground="DarkOrange"
+                Text="Press Space to Start"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Margin="0 360 0 0"
+                FontSize="48" FontStyle="Normal" FontWeight="Thin"
+                />
+            <TextBlock
+                IsVisible="{Binding FirstStartVisibility}"
+                Grid.Column="0" Grid.ColumnSpan="2"
+                Foreground="DarkOrange"
+                Text="Z,X to Rotate ~ Arrows to Move"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Margin="0 480 0 0"
+                FontSize="14" FontStyle="Normal" FontWeight="Thin"
+                />
+        </Grid>
+    </Grid>
+</UserControl>
