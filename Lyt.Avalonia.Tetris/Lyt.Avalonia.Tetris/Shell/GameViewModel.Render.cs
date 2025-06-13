@@ -13,7 +13,6 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         }
 
         this.gameGrid.Children.Clear();
-        this.RenderGridLines();
         this.RenderShapes();
     }
 
@@ -47,15 +46,14 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     private void RenderGridLines()
     {
-        if (this.gameGrid is null)
+        if (this.gameCanvas is null)
         {
-            Debug.WriteLine("Game Grid should not be null");
+            Debug.WriteLine("Game Canvas should not be null");
             return;
         }
 
         double cellWidth = this.field.CellWidth;
         double cellHeight = this.field.CellHeight;
-        var gridLinesPanel = new Canvas();
         var brush = Brushes.BlanchedAlmond;
         for (double linePosition = cellWidth; linePosition <= this.field.Width - cellWidth; linePosition += cellWidth)
         {
@@ -65,9 +63,9 @@ public sealed partial class GameViewModel : ViewModel<GameView>
                 EndPoint = new Point(linePosition, this.field.Height),
                 Stroke = brush,
                 StrokeThickness = 1,
-                Opacity = 0.1,
+                Opacity = 0.15,
             };
-            gridLinesPanel.Children.Add(verticalLine);
+            this.gameCanvas.Children.Add(verticalLine);
         }
 
         for (double linePosition = cellHeight; linePosition <= this.field.Height - cellHeight; linePosition += cellHeight)
@@ -78,12 +76,10 @@ public sealed partial class GameViewModel : ViewModel<GameView>
                 EndPoint = new Point(this.field.Width, linePosition),
                 Stroke = brush,
                 StrokeThickness = 1,
-                Opacity = 0.1,
+                Opacity = 0.15,
             };
-            gridLinesPanel.Children.Add(horizontalLine);
+            this.gameCanvas.Children.Add(horizontalLine);
         }
-
-        this.gameGrid.Children.Insert(0, gridLinesPanel);
     }
 
     private void RenderNextShape(bool[,] shapeBodyMatrix, ShapeKind shapeKind)

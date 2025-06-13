@@ -12,11 +12,11 @@
     xmlns:local="clr-namespace:Lyt.Avalonia.Tetris.Shell"
     xmlns:tetro="clr-namespace:Lyt.Avalonia.Tetris.Model"
 
-    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    mc:Ignorable="d" d:DesignWidth="680" d:DesignHeight="900"
 
     Background="Transparent"
     Focusable="True"	
-    Width="680" Height="960"
+    Width="680" Height="900"
     >
 
     <!-- User Control must have Focusable="True" or else key bindings wont work -->
@@ -54,9 +54,14 @@
             <Border
                 BorderThickness="1" BorderBrush="#20FFEBCD"
                 >
-                <Grid
-                    x:Name="renderSurface"
-                    />
+				<Grid>
+					<Canvas
+						x:Name="renderCanvas"
+						/>
+					<Grid
+						x:Name="renderSurface"
+                        />
+				</Grid>					
             </Border>
             <StackPanel Grid.Column="1" Margin="10 0 0 0">
                 <Border BorderBrush="Black" BorderThickness="0" Margin="0 0 0 0" Padding="4">

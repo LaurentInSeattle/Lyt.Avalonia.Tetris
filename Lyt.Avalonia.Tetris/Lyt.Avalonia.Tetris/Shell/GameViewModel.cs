@@ -21,6 +21,7 @@ public sealed partial class GameViewModel : ViewModel<GameView>
     private State gameState;
 
     private Grid? gameGrid;
+    private Canvas? gameCanvas;
     private Grid? nextShapeGrid;
     private Tetromino? fallingTetromino;
     private Tetromino? nextTetromino;
@@ -81,8 +82,10 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         }
 
         this.gameGrid = this.View.renderSurface;
+        this.gameCanvas = this.View.renderCanvas;
         this.nextShapeGrid = this.View.nextShapeRenderSurface;
 
+        this.RenderGridLines();
         GameViewModel.SetupGameSurfaceVisual(
             this.gameGrid,
             this.field.Rows, this.field.Columns, this.field.Width, this.field.Height,
@@ -324,10 +327,9 @@ public sealed partial class GameViewModel : ViewModel<GameView>
                         newInterval = 50;
                     }
 
-                    Debug.WriteLine("Current: " + currentTimerInterval + "   New: " + newInterval);
+                    Debug.WriteLine("Timer Interval: Current: " + currentTimerInterval + "   New: " + newInterval);
                     this.frameRenderTimer.Interval = TimeSpan.FromMilliseconds(newInterval);
                 }
-
 
                 this.AddToScore(Model.Score.GetLineScore(this.Level, clearedRowsCount));
                 this.RenderField();
