@@ -4,12 +4,86 @@ using static Tetromino;
 
 public sealed partial class GameViewModel : ViewModel<GameView>
 {
+    private Grid? gameGrid;
+    private Canvas? gameCanvas;
+    private Grid? nextShapeGrid;
+    private Dictionary<ShapeKind, Queue<Control>>? shapeQueue;
+
+    private void InitializeRender()
+    {
+        this.gameGrid = this.View.renderSurface;
+        this.gameCanvas = this.View.renderCanvas;
+        this.nextShapeGrid = this.View.nextShapeRenderSurface;
+        this.shapeQueue = [];
+        foreach (ShapeKind shapeKind in Tetromino.ShapeTypes)
+        {
+            if (shapeKind == ShapeKind.Empty)
+            {
+                continue;
+            }
+
+            var queue = new Queue<Control>();
+            for (int i = 0; i < 20; ++i)
+            {
+                queue.Enqueue(CreateBlockVisual(shapeKind));
+            }
+
+            this.shapeQueue.Add(shapeKind, queue);
+        }
+
+        this.RenderGridLines();
+        GameViewModel.SetupGameSurfaceVisual(
+            this.gameGrid,
+            this.field.Rows, this.field.Columns, this.field.Width, this.field.Height,
+            this.field.CellHeight, this.field.CellWidth);
+        this.RenderField();
+    }
+
+    private Control GetShape(ShapeKind shapeKind)
+    {
+        if (this.shapeQueue is null)
+        {
+            throw new Exception("Shape Queue should not be null");
+        }
+
+        var queue = this.shapeQueue[shapeKind] ?? 
+            throw new Exception("Queue for shape should not be null");
+        if (queue.Count == 0)
+        {
+            return CreateBlockVisual(shapeKind);
+        }
+        else
+        {
+            return queue.Dequeue();
+        }
+    }
+
+    private void ReturnShape(Control control)
+    {
+        if (this.shapeQueue is null)
+        {
+            throw new Exception("Shape Queue should not be null");
+        }
+
+        if ((control.Tag is ShapeKind shapeKind) && ( shapeKind != ShapeKind.Empty)) 
+        {
+            var queue = this.shapeQueue[shapeKind] ?? 
+                throw new Exception("Queue for shape should not be null");
+            queue.Enqueue(control);
+        }
+    }
+
     private void RenderField()
     {
         if (this.gameGrid is null)
         {
             Debug.WriteLine("Game Grid should not be null");
             return;
+        }
+
+        foreach(Control control in this.gameGrid.Children)
+        {
+            this.ReturnShape(control);
         }
 
         this.gameGrid.Children.Clear();
@@ -41,7 +115,7 @@ public sealed partial class GameViewModel : ViewModel<GameView>
             return;
         }
 
-        this.gameGrid.Children.Add(CreateBlockVisual(columnIndex, rowIndex, shapeKind));
+        this.gameGrid.Children.Add(this.PlaceBlockVisual(columnIndex, rowIndex, shapeKind));
     }
 
     private void RenderGridLines()
@@ -90,6 +164,11 @@ public sealed partial class GameViewModel : ViewModel<GameView>
             return;
         }
 
+        foreach (Control control in this.nextShapeGrid.Children)
+        {
+            this.ReturnShape(control);
+        }
+
         this.nextShapeGrid.Children.Clear();
         int rows = shapeBodyMatrix.GetLength(0);
         int columns = shapeBodyMatrix.GetLength(1);
@@ -103,13 +182,13 @@ public sealed partial class GameViewModel : ViewModel<GameView>
             {
                 if (shapeBodyMatrix[row, col])
                 {
-                    this.nextShapeGrid.Children.Add(CreateBlockVisual(col, row, shapeKind));
+                    this.nextShapeGrid.Children.Add(this.PlaceBlockVisual(col, row, shapeKind));
                 }
             }
         }
     }
 
-    private static Control CreateBlockVisual(int x, int y, ShapeKind shapeKind)
+    private Control PlaceBlockVisual(int x, int y, ShapeKind shapeKind)
     {
         if (shapeKind == ShapeKind.Empty)
         {
@@ -117,16 +196,36 @@ public sealed partial class GameViewModel : ViewModel<GameView>
             throw new Exception("Shape Kind should not be empty");
         }
 
-        var border = new Border
+        var control = this.GetShape(shapeKind); 
+        Grid.SetColumn(control, x);
+        Grid.SetRow(control, y);
+        return control;
+    }
+
+#pragma warning disable CA1859 
+    // Use concrete types when possible for improved performance
+    // We may wish in some future to create a control that will be a bit more fancy than
+    // just a plain border 
+    // So, we return a control, not a border.
+    // 
+    private static Control CreateBlockVisual(ShapeKind shapeKind)
+
+#pragma warning restore CA1859 
+    {
+        if (shapeKind == ShapeKind.Empty)
+        {
+            Debug.WriteLine("Shape Kind should not be empty");
+            throw new Exception("Shape Kind should not be empty");
+        }
+
+        return new Border
         {
             Background = Tetromino.ShapeToBrush(shapeKind),
             BorderBrush = Brushes.BlanchedAlmond,
             BorderThickness = new Thickness(0.5),
+            Margin = new Thickness(1.0),
+            Tag= shapeKind,
         };
-
-        Grid.SetColumn(border, x);
-        Grid.SetRow(border, y);
-        return border;
     }
 
     private static void SetupGameSurfaceVisual(

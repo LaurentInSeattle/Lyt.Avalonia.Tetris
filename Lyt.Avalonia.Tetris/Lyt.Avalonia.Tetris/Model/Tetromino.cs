@@ -23,7 +23,7 @@ public sealed partial class Tetromino
 
     private static readonly Random randomNumberGenerator = new(Environment.TickCount);
 
-    private static readonly ShapeKind[] shapeTypes =
+    public static readonly ShapeKind[] ShapeTypes =
         [.. Enum.GetValues<ShapeKind>().OfType<ShapeKind>()];
 
     private static readonly Dictionary<ShapeKind, SolidColorBrush> shapeTypeToBrushDict =
@@ -95,7 +95,7 @@ public sealed partial class Tetromino
 
     public Tetromino(Position initialPosition)
     {
-        var shapeType = shapeTypes[randomNumberGenerator.Next(0, shapeTypes.Length-1)];
+        var shapeType = ShapeTypes[randomNumberGenerator.Next(0, ShapeTypes.Length-1)];
         this.TopLeft = initialPosition;
         this.Shape = shapeType;
         this.Brush = shapeTypeToBrushDict[shapeType];

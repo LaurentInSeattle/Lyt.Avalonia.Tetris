@@ -10,6 +10,12 @@
 		<RootNamespace>Lyt.Avalonia.Tetris</RootNamespace>
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <NoWarn>IDE0079</NoWarn>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <NoWarn>IDE0079</NoWarn>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Avalonia" Version="11.3.1" />

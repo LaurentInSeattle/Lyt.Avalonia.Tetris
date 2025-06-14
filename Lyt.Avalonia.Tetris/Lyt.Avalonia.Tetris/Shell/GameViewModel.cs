@@ -20,9 +20,6 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     private State gameState;
 
-    private Grid? gameGrid;
-    private Canvas? gameCanvas;
-    private Grid? nextShapeGrid;
     private Tetromino? fallingTetromino;
     private Tetromino? nextTetromino;
 
@@ -81,17 +78,7 @@ public sealed partial class GameViewModel : ViewModel<GameView>
             throw new Exception("Failed to startup...");
         }
 
-        this.gameGrid = this.View.renderSurface;
-        this.gameCanvas = this.View.renderCanvas;
-        this.nextShapeGrid = this.View.nextShapeRenderSurface;
-
-        this.RenderGridLines();
-        GameViewModel.SetupGameSurfaceVisual(
-            this.gameGrid,
-            this.field.Rows, this.field.Columns, this.field.Width, this.field.Height,
-            this.field.CellHeight, this.field.CellWidth);
-        this.RenderField();
-
+        this.InitializeRender(); 
         this.Logger.Debug("OnViewLoaded complete");
     }
 
