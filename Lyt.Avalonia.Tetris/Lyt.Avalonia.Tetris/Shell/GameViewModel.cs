@@ -23,8 +23,8 @@ public sealed partial class GameViewModel : ViewModel<GameView>
     private Tetromino? fallingTetromino;
     private Tetromino? nextTetromino;
 
-    // private Brush? endGameBlocksBrush;
-    // private BackgroundWorker endGameAnimationWorker;
+    private bool isAnimatingEndGame;
+    private readonly Brush endGameBlocksBrush;
 
     [ObservableProperty]
     private int level;
@@ -34,6 +34,9 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     [ObservableProperty]
     private int highscore;
+
+    [ObservableProperty]
+    private int tetraminos;
 
     [ObservableProperty]
     private int lines;
@@ -59,9 +62,7 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         this.Highscore = Model.Score.GetHighscore();
 
         // Prepare for end game 
-        //this.InitializeEndGameAnimationWorker();
-        //this.endGameBlocksBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#20FFFFFF"));
-        //this.endGameBlocksBrush.Freeze();
+        this.endGameBlocksBrush = new SolidColorBrush(Color.Parse("#20FFFFFF"));
 
         // Prepare for new game 
         this.IsEndGameInfoVisible = false;
@@ -125,8 +126,6 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         this.EndGame();
     }
 
-    private void OnGameEnded() { } //  => CommandManager.InvalidateRequerySuggested();
-
     [RelayCommand]
     public void OnPause()
     {
@@ -183,14 +182,16 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     private void StartNewGame()
     {
-        this.FirstStartVisibility = false;
-        //if (this.endGameAnimationWorker.IsBusy)
-        //{
-        //    this.endGameAnimationWorker.CancelAsync();
-        //}
+        if (this.isAnimatingEndGame)
+        {
+            return; 
+        } 
 
+        this.FirstStartVisibility = false;
+        this.EndGameInfoVisibility = false;
         this.Level = 1;
         this.Score = 0;
+        this.Tetraminos = 0;
         this.Lines = 0;
         this.field.Clear();
         this.gameState = State.Running;
@@ -205,14 +206,12 @@ public sealed partial class GameViewModel : ViewModel<GameView>
 
     private void EndGame()
     {
-        if ((this.gameState == State.Running || this.gameState == State.Paused) &&
-            true) // !this.endGameAnimationWorker.IsBusy)
+        if ((this.gameState == State.Running || this.gameState == State.Paused))
         {
             this.frameRenderTimer.Stop();
             Model.Score.SaveHighscore(this.Highscore);
             this.gameState = State.Ended;
             Schedule.OnUiThread(100, this.OnGameEnded, DispatcherPriority.Normal);
-            // this.endGameAnimationWorker.RunWorkerAsync();
         }
     }
 
@@ -251,6 +250,7 @@ public sealed partial class GameViewModel : ViewModel<GameView>
                 return;
             }
 
+            ++ this.Tetraminos; 
             this.fallingTetromino.UpdateField(this.field.Matrix);
             this.RenderField();
             ShapeKind shapeKind = this.nextTetromino.Shape;
@@ -356,54 +356,27 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         }
     }
 
-    private void InitializeEndGameAnimationWorker()
+    private void OnGameEnded() 
     {
-        //this.endGameAnimationWorker = new BackgroundWorker
-        //{
-        //    WorkerSupportsCancellation = true,
-        //};
-        //this.endGameAnimationWorker.DoWork += this.EndGameAnimationWorker_DoWork;
-        //this.endGameAnimationWorker.RunWorkerCompleted += this.EndGameAnimationWorker_RunWorkerCompleted;
-    }
+        this.isAnimatingEndGame = true;
+        this.EndGameInfoVisibility = true;
 
-    private void EndGameAnimationWorker_DoWork(object sender, DoWorkEventArgs e)
-    {
-        int rows = this.field.Matrix.GetLength(0);
-        int columns = this.field.Matrix.GetLength(1);
-        for (int row = rows - 1; row >= 0; --row)
+        Task.Run(async () =>
         {
-            for (int col = 0; col < columns; ++col)
+            int rows = this.field.Matrix.GetLength(0);
+            int columns = this.field.Matrix.GetLength(1);
+            for (int row = rows - 1; row >= 0; --row)
             {
-                //if (this.endGameAnimationWorker.CancellationPending)
-                //{
-                //    this.field.Clear();
-                //    e.Cancel = true;
-                //    return;
-                //}
+                for (int col = 0; col < columns; ++col)
+                {
+                    Dispatch.OnUiThread(() => {/* Animate here */  });  
 
-                //if (this.gameState != State.Ended)
-                //{
-                //    return;
-                //}
-
-                //_ = Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                //{
-                //    if (this.gameState == State.Ended)
-                //    {
-                //        this.RenderBlock(col, row, this.endGameBlocksBrush);
-                //    }
-                //}));
-
-                // Sleep * after * capturing row and col
-                Thread.Sleep(15);
+                    // Sleep * after * capturing row and col
+                    await Task.Delay(15);
+                }
             }
-        }
-    }
 
-    private void EndGameAnimationWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-    {
-        //this.field.Clear();
-        //Schedule.OnUiThread(200, this.OnEndGameAnimationCompleted);
+            this.isAnimatingEndGame = false;
+        });
     }
-
 }

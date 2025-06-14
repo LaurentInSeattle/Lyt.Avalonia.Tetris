@@ -41,11 +41,6 @@
     <Grid
         x:Name="rootPanel"
         >
-        <Image
-            Stretch="UniformToFill"
-            Source="\Assets\Images\dark.jpg"
-            Grid.ColumnSpan="999" Grid.RowSpan="999"
-            />
         <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="320"/>
@@ -54,14 +49,14 @@
             <Border
                 BorderThickness="1" BorderBrush="#20FFEBCD"
                 >
-				<Grid>
-					<Canvas
-						x:Name="renderCanvas"
-						/>
-					<Grid
-						x:Name="renderSurface"
+                <Grid>
+                    <Canvas
+                        x:Name="renderCanvas"
                         />
-				</Grid>					
+                    <Grid
+                        x:Name="renderSurface"
+                        />
+                </Grid>					
             </Border>
             <StackPanel Grid.Column="1" Margin="10 0 0 0">
                 <Border BorderBrush="Black" BorderThickness="0" Margin="0 0 0 0" Padding="4">
@@ -69,6 +64,7 @@
                         Margin="20 0 0 0"
                         >
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="80" />
                             <RowDefinition Height="80" />
                             <RowDefinition Height="80" />
                             <RowDefinition Height="80" />
@@ -107,19 +103,32 @@
 
                         <TextBlock
                             Grid.Row="2"
-                            Text="Lines: "
+                            Text="Tetraminos: "
                             Foreground="BlanchedAlmond"
                             FontSize="32" FontStyle="Normal" FontWeight="Thin"
                             />
                         <TextBlock
                             Grid.Row="2" Grid.Column="1"
+                            Text="{Binding Tetraminos}"
+                            HorizontalAlignment="Right"
+                            Foreground="BlanchedAlmond"
+                            FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                            />
+                        <TextBlock
+                            Grid.Row="3"
+                            Text="Lines: "
+                            Foreground="BlanchedAlmond"
+                            FontSize="32" FontStyle="Normal" FontWeight="Thin"
+                            />
+                        <TextBlock
+                            Grid.Row="3" Grid.Column="1"
                             Text="{Binding Lines}"
                             HorizontalAlignment="Right"
                             Foreground="BlanchedAlmond"
                             FontSize="32" FontStyle="Normal" FontWeight="Thin"
                             />
 
-                        <StackPanel Orientation="Horizontal" Grid.Row="3" VerticalAlignment="Top">
+                        <StackPanel Orientation="Horizontal" Grid.Row="4" VerticalAlignment="Top">
                             <TextBlock
                                 Text="High Score: "
                                 Foreground="BlanchedAlmond"
@@ -127,7 +136,7 @@
                                 />
                         </StackPanel>
                         <TextBlock
-                            Grid.Row="3" Grid.Column="1"
+                            Grid.Row="4" Grid.Column="1"
                             Text="{Binding Highscore}"
                             HorizontalAlignment="Right" VerticalAlignment="Top"
                             Foreground="BlanchedAlmond"
@@ -149,42 +158,6 @@
                             />
                     </StackPanel>
                 </Border>
-                <Border
-                    HorizontalAlignment="Left" Margin="0 10 0 0"
-                    IsVisible="False"
-                    >
-                    <StackPanel>
-                        <Button
-                            Content="Start" Command="{Binding OnStartGame}"  Focusable="False"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Padding="10 5 10 5"
-                            Margin="0 4 0 0"
-                            Width="100"
-                            />
-                        <Button
-                            Content="End" Command="{Binding OnEndGame}" Focusable="False"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Padding="5" Margin="0 4 0 0"
-                            Width="100"
-                            />
-                        <Button
-                            Content="Pause" Command="{Binding OnPause}" Focusable="False"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Padding="10 5 10 5" Margin="0 4 0 0"
-                            Width="100"
-                            />
-                        <Button
-                            Content="Resume" Command="{Binding OnResume}" Focusable="False"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Padding="10 5 10 5" Margin="0 4 0 0"
-                            Width="100"
-                            />
-                    </StackPanel>
-                </Border>
             </StackPanel>
             <TextBlock
                 IsVisible="{Binding EndGameInfoVisibility}"
@@ -192,8 +165,8 @@
                 Foreground="DarkOrange"
                 Text="Game Over"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
-                Margin="0 260 0 0"
-                FontSize="120" FontStyle="Normal" FontWeight="Thin"
+                Margin="-10 500 0 0"
+                FontSize="132" FontStyle="Normal" FontWeight="Thin"
                 />
             <TextBlock
                 IsVisible="{Binding FirstStartVisibility}"
@@ -202,7 +175,7 @@
                 Text="Press Space to Start"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
                 Margin="0 360 0 0"
-                FontSize="48" FontStyle="Normal" FontWeight="Thin"
+                FontSize="54" FontStyle="Normal" FontWeight="Thin"
                 />
             <TextBlock
                 IsVisible="{Binding FirstStartVisibility}"
@@ -211,7 +184,7 @@
                 Text="Z,X to Rotate ~ Arrows to Move"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
                 Margin="0 480 0 0"
-                FontSize="14" FontStyle="Normal" FontWeight="Thin"
+                FontSize="16" FontStyle="Normal" FontWeight="Thin"
                 />
         </Grid>
     </Grid>
