@@ -202,6 +202,30 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         return control;
     }
 
+    private void RemoveBlockAt(int row, int col)
+    {
+        if (this.gameGrid is null || this.gameGrid.Children.Count == 0)
+        {
+            return;
+        }
+
+        Control? toRemove = null;
+        foreach (var control in this.gameGrid.Children)
+        {
+            if ((Grid.GetRow(control) == row) && (Grid.GetColumn(control) == col))
+            {
+                toRemove = control;
+                break;
+            }
+        }
+
+        if (toRemove is not null)
+        {
+            this.gameGrid.Children.Remove(toRemove);
+            this.ReturnShape(toRemove);
+        }
+    }
+
 #pragma warning disable CA1859 
     // Use concrete types when possible for improved performance
     // We may wish in some future to create a control that will be a bit more fancy than

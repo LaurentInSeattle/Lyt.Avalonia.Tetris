@@ -24,7 +24,6 @@ public sealed partial class GameViewModel : ViewModel<GameView>
     private Tetromino? nextTetromino;
 
     private bool isAnimatingEndGame;
-    private readonly Brush endGameBlocksBrush;
 
     [ObservableProperty]
     private int level;
@@ -60,9 +59,6 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         this.frameRenderTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(frameRenderingInterval) };
         this.frameRenderTimer.Tick += this.OnFrameRenderTimerTick;
         this.Highscore = Model.Score.GetHighscore();
-
-        // Prepare for end game 
-        this.endGameBlocksBrush = new SolidColorBrush(Color.Parse("#20FFFFFF"));
 
         // Prepare for new game 
         this.IsEndGameInfoVisible = false;
@@ -369,10 +365,10 @@ public sealed partial class GameViewModel : ViewModel<GameView>
             {
                 for (int col = 0; col < columns; ++col)
                 {
-                    Dispatch.OnUiThread(() => {/* Animate here */  });  
+                    Dispatch.OnUiThread(() => this.RemoveBlockAt(row, col));    
 
                     // Sleep * after * capturing row and col
-                    await Task.Delay(15);
+                    await Task.Delay(42);
                 }
             }
 
