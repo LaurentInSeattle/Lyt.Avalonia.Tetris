@@ -38,8 +38,23 @@ public sealed partial class Tetromino
             [ShapeKind.I] = new SolidColorBrush(Color.Parse("#5A68A1")),
         };
 
-    public static SolidColorBrush ShapeToBrush (ShapeKind shapeKind)
+    private static readonly Dictionary<ShapeKind, SolidColorBrush> shapeTypeToBrushBorderDict =
+        new()
+        {
+            [ShapeKind.J] = new SolidColorBrush(Color.Parse("#FF6764")),
+            [ShapeKind.L] = new SolidColorBrush(Color.Parse("#4AA3E4")),
+            [ShapeKind.S] = new SolidColorBrush(Color.Parse("#C2B35C")),
+            [ShapeKind.Z] = new SolidColorBrush(Color.Parse("#4DC0B9")),
+            [ShapeKind.T] = new SolidColorBrush(Color.Parse("#749554")),
+            [ShapeKind.O] = new SolidColorBrush(Color.Parse("#A6E06E")),
+            [ShapeKind.I] = new SolidColorBrush(Color.Parse("#8A98D1")),
+        };
+
+    public static SolidColorBrush ShapeToBrush(ShapeKind shapeKind)
         => shapeTypeToBrushDict[shapeKind];
+
+    public static SolidColorBrush ShapeToBrushBorder(ShapeKind shapeKind)
+        => shapeTypeToBrushBorderDict[shapeKind];
 
     private static readonly Dictionary<ShapeKind, bool[,]> shapeTypeToMatrixDict =
         new()

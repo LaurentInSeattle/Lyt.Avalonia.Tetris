@@ -245,8 +245,8 @@ public sealed partial class GameViewModel : ViewModel<GameView>
         return new Border
         {
             Background = Tetromino.ShapeToBrush(shapeKind),
-            BorderBrush = Brushes.BlanchedAlmond,
-            BorderThickness = new Thickness(0.5),
+            BorderBrush = Tetromino.ShapeToBrushBorder(shapeKind),
+            BorderThickness = new Thickness(1.0),
             Margin = new Thickness(1.0),
             Tag= shapeKind,
         };

@@ -6,7 +6,17 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationIcon>Tetris.ico</ApplicationIcon>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Tetris.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <AvaloniaResource Include="Tetris.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Tetris.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.1" />
