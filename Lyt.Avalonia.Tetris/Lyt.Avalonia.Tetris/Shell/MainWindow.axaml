@@ -9,7 +9,7 @@
     WindowState="Normal"
     Title="Avalonia Tetris"
     Background="Black"
-    Width="720" Height="940"
+    Width="680" Height="780"
     >
     <Grid>
         <Image

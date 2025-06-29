@@ -249,6 +249,7 @@ public sealed partial class GameViewModel : ViewModel<GameView>
             BorderThickness = new Thickness(1.0),
             Margin = new Thickness(1.0),
             Tag= shapeKind,
+            CornerRadius=new CornerRadius(2.0),
         };
     }
 
