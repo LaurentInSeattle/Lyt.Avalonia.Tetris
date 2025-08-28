@@ -73,7 +73,6 @@ global using Lyt.Avalonia.Mvvm.Logging;
 global using Lyt.Avalonia.Mvvm.Toasting;
 global using Lyt.Avalonia.Mvvm.Utilities;
 
-global using Lyt.Messaging;
 global using Lyt.Model;
 global using Lyt.Mvvm;
 global using Lyt.Utilities.Extensions;

@@ -29,7 +29,6 @@ public partial class App : ApplicationBase
             App.LoggerService,
             new Tuple<Type, Type>(typeof(IDialogService), typeof(DialogService)),
             new Tuple<Type, Type>(typeof(IDispatch), typeof(Dispatch)),
-            new Tuple<Type, Type>(typeof(IMessenger), typeof(Messenger)),
             new Tuple<Type, Type>(typeof(IProfiler), typeof(Profiler)),
             new Tuple<Type, Type>(typeof(IRandomizer), typeof(Randomizer)),
         ],
@@ -52,31 +51,4 @@ public partial class App : ApplicationBase
                 new Tuple<Type, Type>(typeof(ILogger), typeof(Logger));
 
     public bool RestartRequired { get; set; }
-
-    //protected override Task OnStartupBegin()
-    //{
-    //    var logger = App.GetRequiredService<ILogger>();
-    //    logger.Debug("OnStartupBegin begins");
-
-    //    logger.Debug("OnStartupBegin complete");
-    //    return Task.CompletedTask;
-    //}
-
-    //protected override Task OnShutdownComplete()
-    //{
-    //    var logger = App.GetRequiredService<ILogger>();
-    //    logger.Debug("On Shutdown Complete");
-
-    //    if (this.RestartRequired)
-    //    {
-    //        logger.Debug("On Shutdown Complete: Restart Required");
-    //        var process = Process.GetCurrentProcess();
-    //        if ((process is not null) && (process.MainModule is not null))
-    //        {
-    //            Process.Start(process.MainModule.FileName);
-    //        }
-    //    }
-
-    //    return Task.CompletedTask;
-    //}
 }

@@ -2,11 +2,7 @@
 
 public sealed class TetrisModel : ModelBase
 {
-    public TetrisModel(IMessenger messenger, ILogger logger) : base(messenger, logger)
-    {
-        this.ShouldAutoSave = false;
-    }
+    public TetrisModel(ILogger logger) : base(logger) => this.ShouldAutoSave = false;
 
-    public override Task Initialize() { return Task.CompletedTask;  }
-
+    public override Task Initialize() => Task.CompletedTask;
 }
