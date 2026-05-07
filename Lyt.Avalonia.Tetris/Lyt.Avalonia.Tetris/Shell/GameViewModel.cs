@@ -26,28 +26,28 @@ public sealed partial class GameViewModel : ViewModel<GameView>
     private bool isAnimatingEndGame;
 
     [ObservableProperty]
-    private int level;
+    public partial int Level { get; set; }
 
     [ObservableProperty]
-    private int score;
+    public partial int Score { get; set; }
 
     [ObservableProperty]
-    private int highscore;
+    public partial int Highscore { get; set; }
 
     [ObservableProperty]
-    private int tetraminos;
+    public partial int Tetraminos { get; set; }
 
     [ObservableProperty]
-    private int lines;
+    public partial int Lines { get; set; }
 
     [ObservableProperty]
-    private bool isEndGameInfoVisible;
+    public partial bool IsEndGameInfoVisible { get; set; }
 
     [ObservableProperty]
-    private bool endGameInfoVisibility;
+    public partial bool EndGameInfoVisibility { get; set; }
 
     [ObservableProperty]
-    private bool firstStartVisibility;
+    public partial bool FirstStartVisibility { get; set; }
 
     public GameViewModel(TetrisModel tetrisModel)
     {

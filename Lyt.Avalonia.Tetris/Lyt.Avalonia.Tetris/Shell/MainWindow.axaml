@@ -18,7 +18,7 @@
             Grid.ColumnSpan="999" Grid.RowSpan="999"
             />
         <Rectangle
-            Fill="#20000020"
+            Fill="#30000020"
             Grid.ColumnSpan="999" Grid.RowSpan="999"
             />
         <Viewbox
